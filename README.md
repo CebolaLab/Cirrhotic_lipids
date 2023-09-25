@@ -47,6 +47,24 @@ GLA	| Glycosphingolipid metabolism
 GBA	| Glycosphingolipid metabolism
 HEXA	| Glycosphingolipid metabolism
 
+```r
+# Load libraries
+library('Seurat')
+library('dplyr')
+library('gridExtra')
+library('scater')
+library('limma')
+library('ggplot2')
+```
+
+The single-cell RNA-seq data from the [Guilliams et al. 2022](https://www.cell.com/cell/fulltext/S0092-8674(21)01481-1) Liver Cell Atlas is available at this link: [https://www.livercellatlas.org/datasets_human.php](https://www.livercellatlas.org/datasets_human.php)
+
+```r
+#read.table is the command for reading a file in the current directory (folder) 
+#cell.annot= means "save the file you have just read as a dataframe called cell.annot"
+cell.annot=read.table('annot_humanAll.csv',sep=',',header=TRUE)
+```
+
 ## Candidate gene UMAPs
 UMAP:
 | Gene	| B |
