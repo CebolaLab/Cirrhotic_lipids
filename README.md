@@ -74,6 +74,17 @@ wget https://www.livercellatlas.org/data_files/toDownload/rawData_human.zip
 unzip rawData_human.zip
 ```
 
+The data can be read into R:
+```r
+liverall = Read10X('rawData_human/countTable_human/',
+  gene.column = 1,
+  cell.column = 1,
+  unique.features = TRUE,
+  strip.suffix = FALSE)
+```
+
+Filter the `liverall` object using the `cell.annot` dataframe, which contains cell retained after QC filtering.
+
 ## Candidate gene UMAPs
 UMAP:
 | Gene	| B |
