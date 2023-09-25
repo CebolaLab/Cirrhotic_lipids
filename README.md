@@ -82,14 +82,32 @@ unzip rawData_human.zip
 
 The data can be read into R:
 ```r
+# Read in the count tables containing the raw data
 liverall = Read10X('rawData_human/countTable_human/',
   gene.column = 1,
   cell.column = 1,
   unique.features = TRUE,
   strip.suffix = FALSE)
+  
+# Create a Seurat object using the data
+liverall_object = CreateSeuratObject(counts = liverall)
 ```
 
 Filter the `liverall` object using the `cell.annot` dataframe, which contains cell retained after QC filtering.
+
+```r
+liver.filtered <- subset(liverall_object, cells = cell.annot$cell)
+# Add information to the metadata in the liver.filtered object.
+liver.filtered[['cluster']] = cell.annot$cluster
+liver.filtered[['annot']] = cell.annot$annot
+```
+
+Normalise the raw data using the Seurat `SCTransform` command.
+
+```r
+#Look up the SCTransform on the Seurat website. 
+liver.filtered = SCTransform(liver.filtered, conserve.memory = TRUE,return.only.var.genes = FALSE) 
+```
 
 ## Candidate gene UMAPs
 UMAP:
