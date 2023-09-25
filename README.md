@@ -124,7 +124,20 @@ AAACGGGAGTTAGGTA-1 | SeuratProject | 1615 | 719	| 7 | Mono+mono derived cells	| 
 AAACGGGCACCAGATT-1 | SeuratProject | 2537 | 848	| 7 | Mono+mono derived cells | 2652 | 848 |
 AAACGGGTCATTGCCC-1 | SeuratProject | 5905 | 1406 | 43 | cDC1s | 4157	| 1403 | 
 
+```r
+# extract the meta data and add the UMAP coordinates
+metadata_table = liver.filtered@meta.data 
+metadata_table$UMI_id = rownames(metadata_table) 
+head(metadata_table)
 
+#Adding the UMAP coordinates defined in the published data
+umapCoord = cell.annot[,1:2]
+umapCoord$UMI_id = cell.annot$cell
+metadata_table = merge.data.frame(metadata_table,umapCoord,by = "UMI_id") 
+
+# Add the new meta data back to the Seurat object
+liver.filtered = AddMetaData(liver.filtered, metadata = metadata_table)
+```
 
 ## Candidate gene UMAPs
 UMAP:
