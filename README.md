@@ -169,6 +169,7 @@ ggsave('genes_of_interest_dotplot.pdf',width=10)
 
 
 ## Candidate gene UMAPs
+
 UMAP:
 | Gene	| B |
 | ---- | ---- | 
@@ -181,3 +182,12 @@ ASAH1	| Macrophage and others
 S1PR4	| Monocytes, NK, T
 UGCG	| Dendirtic and others
 PSAP	| High esp mono and macro
+
+```r
+# Plot UMAPs using the FeaturePlot command
+FeaturePlot(object = liver.filtered, features = 'PSAP', label=FALSE, max.cutoff = 2, slot = 'data)
+ggsave('UMAP_PSAP_maxcutoff_2_small.pdf',width=3.5,height=3)
+```
+<img src="https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/UMAP_PSAP_maxcutoff_4.png" width="70%" height="70%">
+
+
