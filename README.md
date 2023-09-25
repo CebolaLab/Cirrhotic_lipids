@@ -13,7 +13,9 @@ C) some cirrhotic v healthy violin plots from Ramachandran dataset of a few key 
 
 ## Expression by cell type
 
-Dot plot:
+First, we will explore the expression of our candidate genes using the scRNA-seq data from [Guilliams et al. (2022)](https://www.cell.com/cell/fulltext/S0092-8674(21)01481-1), available via the [Liver Cell Atlas](https://www.livercellatlas.org/datasets_human.php). 
+
+The genes of interest:
 | Gene  | Function |
 | ----- | ---- |
 | ELOVL1 | Lipid remodelling |
@@ -96,7 +98,7 @@ liverall_object = CreateSeuratObject(counts = liverall)
 Filter the `liverall` object using the `cell.annot` dataframe, which contains cell retained after QC filtering.
 
 ```r
-liver.filtered <- subset(liverall_object, cells = cell.annot$cell)
+liver.filtered = subset(liverall_object, cells = cell.annot$cell)
 # Add information to the metadata in the liver.filtered object.
 liver.filtered[['cluster']] = cell.annot$cluster
 liver.filtered[['annot']] = cell.annot$annot
@@ -108,6 +110,19 @@ Normalise the raw data using the Seurat `SCTransform` command.
 #Look up the SCTransform on the Seurat website. 
 liver.filtered = SCTransform(liver.filtered, conserve.memory = TRUE,return.only.var.genes = FALSE) 
 ```
+
+```r
+head(liver.filtered@meta.data)
+```
+
+| orig.ident| nCount_RNA | nFeature_RNA | cluster| annot | nCount_SCT | nFeature_SCT |
+| ---- | ---- | ---- | ---- | ---- | ---- | ---- | 
+| AAACCTGTCAGGATCT-1 |	SeuratProject | 4080 | 1343 | 34 |Mono+mono | derived cells | 3528 | 1343 | 
+AAACGGGAGCACAGGT-1	SeuratProject	7833	1857	34	Mono+mono derived cells	3648	698
+AAACGGGAGTGTGGCA-1	SeuratProject	2665	1019	14	Mono+mono derived cells	2724	1019
+AAACGGGAGTTAGGTA-1	SeuratProject	1615	719	7	Mono+mono derived cells	2402	719
+AAACGGGCACCAGATT-1	SeuratProject	2537	848	7	Mono+mono derived cells	2652	848
+AAACGGGTCATTGCCC-1	SeuratProject	5905	1406	43	cDC1s	4157	1403
 
 ## Candidate gene UMAPs
 UMAP:
