@@ -5,11 +5,13 @@ Corresponding author: Hannah Maude, hannah.maude12@imperial.ac.uk
 
 **Plots to create:**
 
-A) expression per cell population dot plot of set of 30 genes (Guilliams et al. dataset)
+A) [Expression by cell type](#expression-by-cell-type): expression per cell population dot plot of set of 30 genes (Guilliams et al. dataset)
 
-B) [Candidate gene UMAPs](#candidate-gene-UMAPs) some individual UMAPS of key genes Guilliams data set)
+B) [Candidate gene UMAPs](#candidate-gene-UMAPs): some individual UMAPS of key genes Guilliams data set)
 
 C) some cirrhotic v healthy violin plots from Ramachandran dataset of a few key genes and their relevant cell populations.
+
+## Expression by cell type
 
 Dot plot:
 | Gene  | Function |
