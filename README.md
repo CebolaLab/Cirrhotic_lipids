@@ -188,6 +188,6 @@ PSAP	| High esp mono and macro
 FeaturePlot(object = liver.filtered, features = 'PSAP', label=FALSE, max.cutoff = 2, slot = 'data)
 ggsave('UMAP_PSAP_maxcutoff_2_small.pdf',width=3.5,height=3)
 ```
-<img src="https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/UMAP_PSAP_maxcutoff_4.png" width="70%" height="70%">
+<img src="https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/UMAP_PSAP_maxcutoff_4.png" width="50%" height="50%">
 
 
