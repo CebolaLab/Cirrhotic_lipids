@@ -115,7 +115,7 @@ liver.filtered = SCTransform(liver.filtered, conserve.memory = TRUE,return.only.
 head(liver.filtered@meta.data)
 ```
 
-| orig.ident| nCount_RNA | nFeature_RNA | cluster| annot | nCount_SCT | nFeature_SCT |
+| <br> orig.ident &nbsp;&nbsp;&nbsp; | nCount_RNA | nFeature_RNA | cluster| annot | nCount_SCT | nFeature_SCT |
 | ---- | ---- | ---- | ---- | ---- | ---- | ---- | 
 | AAACCTGTCAGGATCT-1 |	SeuratProject | 4080 | 1343 | 34 |Mono+mono | derived cells | 3528 | 1343 | 
 AAACGGGAGCACAGGT-1 | SeuratProject	| 7833	| 1857 |	34 |	Mono+mono derived cells	| 3648	| 698 |
