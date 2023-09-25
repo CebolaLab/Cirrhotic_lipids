@@ -5,7 +5,7 @@ Corresponding author: Hannah Maude, hannah.maude12@imperial.ac.uk
 
 **Plots to create:**
 
-A) expression per cell popn dot plot of set of 30 genes (Guilliams dataset)
+A) expression per cell population dot plot of set of 30 genes (Guilliams et al. dataset)
 
 B) some individual UMAPS of key genes Guilliams data set)
 
@@ -44,3 +44,16 @@ B3GNT5	| Glycosphingolipid metabolism
 GLA	| Glycosphingolipid metabolism
 GBA	| Glycosphingolipid metabolism
 HEXA	| Glycosphingolipid metabolism
+
+UMAP:
+| Gene	| B |
+| ---- | ---- | 
+LPCAT1 |Endothelial and NKT
+LPCAT2	| Macrophages
+FAR1	| Endothelial, stromal, other
+SPTLC2	| Variety - highest in macropahge, endothelial
+SGMS1	| Hep, stromal and others
+ASAH1	| Macrophage and others
+S1PR4	| Monocytes, NK, T
+UGCG	| Dendirtic and others
+PSAP	| High esp mono and macro
