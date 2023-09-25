@@ -126,18 +126,22 @@ AAACGGGTCATTGCCC-1 | SeuratProject | 5905 | 1406 | 43 | cDC1s | 4157	| 1403 |
 
 ```r
 # extract the meta data and add the UMAP coordinates
-metadata_table = liver.filtered@meta.data 
-metadata_table$UMI_id = rownames(metadata_table) 
-head(metadata_table)
-
-#Adding the UMAP coordinates defined in the published data
 umapCoord = cell.annot[,1:2]
-umapCoord$UMI_id = cell.annot$cell
-metadata_table = merge.data.frame(metadata_table,umapCoord,by = "UMI_id") 
-
-# Add the new meta data back to the Seurat object
-liver.filtered = AddMetaData(liver.filtered, metadata = metadata_table)
+rownames(umapCoord) = cell.annot$cell
+umapCoord = umapCoord[rownames(liver.filtered@meta.data),]
+liver.filtered = AddMetaData(liver.filtered, metadata = umapCoord)
 ```
+
+```r
+# add it by CreateDimReducObject
+liver.filtered[['umap']] <- CreateDimReducObject(embeddings = as.matrix(liver.filtered@meta.data[,c('UMAP_1','UMAP_2')]),
+                                key = 'umap_', assay = 'RNA')
+DimPlot(object = liver.filtered, label = TRUE,group.by = 'annot', reduction = "umap") + NoLegend() #+ ggtitle("Integrated controls") #+ ylim(-12,15) + xlim(-20,10)
+```
+
+![UMAP](https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/Liver_atlas_all_clusters_github.png)
+
+<img src="https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/Liver_atlas_all_clusters_github.png" width="50%" height="50%">
 
 ## Candidate gene UMAPs
 UMAP:
