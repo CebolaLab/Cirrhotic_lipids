@@ -7,7 +7,7 @@ Corresponding author: Hannah Maude, hannah.maude12@imperial.ac.uk
 
 A) expression per cell population dot plot of set of 30 genes (Guilliams et al. dataset)
 
-B) some individual UMAPS of key genes Guilliams data set)
+B) [Candidate gene UMAPs](#candidate-gene-UMAPs) some individual UMAPS of key genes Guilliams data set)
 
 C) some cirrhotic v healthy violin plots from Ramachandran dataset of a few key genes and their relevant cell populations.
 
@@ -45,6 +45,7 @@ GLA	| Glycosphingolipid metabolism
 GBA	| Glycosphingolipid metabolism
 HEXA	| Glycosphingolipid metabolism
 
+## Candidate gene UMAPs
 UMAP:
 | Gene	| B |
 | ---- | ---- | 
