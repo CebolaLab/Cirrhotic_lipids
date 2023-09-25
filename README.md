@@ -9,7 +9,7 @@ A) [Expression by cell type](#expression-by-cell-type): expression per cell popu
 
 B) [Candidate gene UMAPs](#candidate-gene-UMAPs): some individual UMAPS of key genes Guilliams data set)
 
-C) some cirrhotic v healthy violin plots from Ramachandran dataset of a few key genes and their relevant cell populations.
+C) [Cirrhotic vs healthy expression](#cirrhotic-vs-healthy-expression): some cirrhotic v healthy violin plots from Ramachandran dataset of a few key genes and their relevant cell populations.
 
 ## Expression by cell type
 
@@ -190,4 +190,4 @@ ggsave('UMAP_PSAP_maxcutoff_2_small.pdf',width=3.5,height=3)
 ```
 <img src="https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/UMAP_PSAP_maxcutoff_4.png" width="50%" height="50%">
 
-
+## Cirrhotic vs healthy expression
