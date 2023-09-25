@@ -165,7 +165,7 @@ ggsave('genes_of_interest_dotplot.pdf',width=10)
 #ggsave('genes_of_interest_dotplot.png',width=10)
 ```
 
-<img src="https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/genes_of_interest_dotplot.png" width="50%" height="50%">
+<img src="https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/genes_of_interest_dotplot.png" width="70%" height="70%">
 
 
 ## Candidate gene UMAPs
