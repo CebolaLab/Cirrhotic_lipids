@@ -139,9 +139,34 @@ liver.filtered[['umap']] <- CreateDimReducObject(embeddings = as.matrix(liver.fi
 DimPlot(object = liver.filtered, label = TRUE,group.by = 'annot', reduction = "umap") + NoLegend() #+ ggtitle("Integrated controls") #+ ylim(-12,15) + xlim(-20,10)
 ```
 
-![UMAP](https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/Liver_atlas_all_clusters_github.png)
-
 <img src="https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/Liver_atlas_all_clusters_github.png" width="50%" height="50%">
+
+
+Read in the file containing the genes of interest:
+
+```r
+genes = read.delim('candidate_genes_dotplots.txt')
+head(genes)
+```
+| Gene | Function |
+| ---- | ---- | 
+ELOVL1	| Lipid remodelling
+LPCAT1	| Lipid remodelling
+LPCAT2	| Lipid remodelling
+FAR1	| Lipid remodelling
+GNPAT	| Lipid remodelling
+SPTLC2	| Ceramide metabolism
+
+Dotplot of expression by cell type:
+
+```r
+DotPlot(object = liver.filtered, features = unique(genes$Gene), group.by='annot') + theme(axis.text.x = element_text(angle = 45,hjust=1))
+ggsave('genes_of_interest_dotplot.pdf',width=10)
+#ggsave('genes_of_interest_dotplot.png',width=10)
+```
+
+<img src="https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/genes_of_interest_dotplot.png" width="50%" height="50%">
+
 
 ## Candidate gene UMAPs
 UMAP:
