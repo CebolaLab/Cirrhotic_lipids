@@ -57,9 +57,15 @@ library('limma')
 library('ggplot2')
 ```
 
-The single-cell RNA-seq data from the [Guilliams et al. 2022](https://www.cell.com/cell/fulltext/S0092-8674(21)01481-1) Liver Cell Atlas is available at this link: [https://www.livercellatlas.org/datasets_human.php](https://www.livercellatlas.org/datasets_human.php). The data can be downloaded from [this page](https://www.livercellatlas.org/download.php), including the gene-cell count matrix and cell annotation matrix for all liver cells, or analysis subsets (myeloid cells, lymphoid cells, CD45- cells). Download the *cell annotation matrix* for all liver cells.
+The single-cell RNA-seq data from the [Guilliams et al. 2022](https://www.cell.com/cell/fulltext/S0092-8674(21)01481-1) Liver Cell Atlas is available at this link: [https://www.livercellatlas.org/datasets_human.php](https://www.livercellatlas.org/datasets_human.php). The data can be downloaded from [this page](https://www.livercellatlas.org/download.php), including the gene-cell count matrix and cell annotation matrix for all liver cells, or analysis subsets (myeloid cells, lymphoid cells, CD45- cells). Download the *cell annotation matrix* for all liver cells:
+
+```bash
+# Run this on the command line (bash)
+wget https://www.livercellatlas.org/data_files/toDownload/annot_humanAll.csv
+```
 
 ```r
+# The data can then be read into R
 # Use the read.table command to read in the annotation file from the current directory and save it as a dataframe called cell.annot
 cell.annot = read.table('annot_humanAll.csv',sep=',',header=TRUE)
 ```
