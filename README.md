@@ -147,11 +147,9 @@ head(genes)
 ```
 | Gene | Function |
 | ---- | ---- | 
-ELOVL1	| Lipid remodelling
 LPCAT1	| Lipid remodelling
 LPCAT2	| Lipid remodelling
 FAR1	| Lipid remodelling
-GNPAT	| Lipid remodelling
 SPTLC2	| Ceramide metabolism
 
 Dotplot of expression by cell type:
