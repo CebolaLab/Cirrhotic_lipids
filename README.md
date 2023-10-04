@@ -18,10 +18,10 @@ First, we will explore the expression of our candidate genes using the scRNA-seq
 The genes of interest:
 | Gene  | Function |
 | ----- | ---- |
-| ELOVL1 | Lipid remodelling |
 | LPCAT1 | Lipid remodelling |
 | LPCAT2 | Lipid remodelling |
-FAR1	| Lipid remodelling
+FAR1	| Plasmalogen synthesis
+GNPS    | Plasmalogen synthesis
 GNPAT	| Lipid remodelling
 SPTLC2	| Ceramide metabolism
 CERS2	| Ceramide metabolism
