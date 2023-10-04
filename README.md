@@ -21,13 +21,11 @@ The genes of interest:
 | LPCAT1 | Lipid remodelling |
 | LPCAT2 | Lipid remodelling |
 FAR1	| Plasmalogen synthesis
-GNPS    | Plasmalogen synthesis
-GNPAT	| Lipid remodelling
 SPTLC2	| Ceramide metabolism
-CERS2	| Ceramide metabolism
 CERS5	| Ceramide metabolism
 CERS6	| Ceramide metabolism
 DEGS1	| Ceramide metabolism
+DEGS2	| Ceramide metabolism
 CERK	| Ceramide metabolism
 SPHK1	| Ceramide metabolism
 SGPP2	| Ceramide metabolism
@@ -35,9 +33,8 @@ SGMS1	| Ceramide metabolism
 SMPD1	| Ceramide metabolism
 SMPD3	| Ceramide metabolism
 ASAH1	| Ceramide metabolism
-S1PR4	| Signalling
 UGCG	| Glycosphingolipid metabolism
-PSAP	| Glycosphingolipid metabolism
+GBA	| Glycosphingolipid metabolism
 B4GALT5	| Glycosphingolipid metabolism
 B4GALT6	| Glycosphingolipid metabolism
 ARSA	| Glycosphingolipid metabolism
@@ -46,8 +43,8 @@ GBGT1	| Glycosphingolipid metabolism
 B3GALT4	| Glycosphingolipid metabolism
 B3GNT5	| Glycosphingolipid metabolism
 GLA	| Glycosphingolipid metabolism
-GBA	| Glycosphingolipid metabolism
 HEXA	| Glycosphingolipid metabolism
+NEU1    | Glycosphingolipid metabolism
 
 ```r
 # Load libraries
