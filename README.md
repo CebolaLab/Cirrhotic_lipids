@@ -122,11 +122,17 @@ AAACGGGCACCAGATT-1 | SeuratProject | 2537 | 848	| 7 | Mono+mono derived cells | 
 AAACGGGTCATTGCCC-1 | SeuratProject | 5905 | 1406 | 43 | cDC1s | 4157	| 1403 | 
 
 ```r
+# The UMAP coordinates corresponding to the Liver Cell Atlas webpage can be added for consistency. Here, the UMAP will be recalculated to add the full model for reference-query dataset integration.
 # extract the meta data and add the UMAP coordinates
-umapCoord = cell.annot[,1:2]
-rownames(umapCoord) = cell.annot$cell
-umapCoord = umapCoord[rownames(liver.filtered@meta.data),]
-liver.filtered = AddMetaData(liver.filtered, metadata = umapCoord)
+# umapCoord = cell.annot[,1:2]
+# rownames(umapCoord) = cell.annot$cell
+# umapCoord = umapCoord[rownames(liver.filtered@meta.data),]
+# liver.filtered = AddMetaData(liver.filtered, metadata = umapCoord)
+```
+
+```r
+liver.filtered <- RunPCA(liver.filtered, verbose = FALSE, return.model = TRUE)
+liver.filtered <- RunUMAP(liver.filtered, reduction = "pca", dims = 1:30, return.model = TRUE)
 ```
 
 ```r
@@ -347,9 +353,10 @@ Integrate the samples.
 
 ```r
 # Try with a reduced number of features and PCA dimensions
+# nfeatures reduced to 2500 to avoid errors
 features <- SelectIntegrationFeatures(object.list = all_list, nfeatures = 2500)
 all_list <- PrepSCTIntegration(object.list = all_list, anchor.features = features)
-#liver.anchors <- FindIntegrationAnchors(all_list, normalization.method = "SCT", anchor.features = features) #, dims = 1:30)
+# dims reduced to 25 as using 30 returned an error
 liver.anchors <- FindIntegrationAnchors(all_list, normalization.method = "SCT", anchor.features = features, dims = 1:25)
 
 # this command creates an 'integrated' data assay
@@ -369,3 +376,17 @@ DimPlot(all.integrated, group.by = "orig.ident")
 DimPlot(all.integrated, group.by = "phenotype")
 DimPlot(all.integrated, group.by = "seurat_clusters", label=TRUE)
 ```
+
+## Integrate the Ramachandran et al. dataset with the Liver Cell Atlas
+
+```r
+anchors <- FindTransferAnchors(reference = liver.filtered, query = all.integrated,
+    dims = 1:30, reference.reduction = "pca")
+    
+all.integrated <- MapQuery(anchorset = anchors, reference = liver.filtered, query = all.integrated,
+    refdata = list(celltype = "annot"), reference.reduction = "pca", reduction.model = "umap")
+    
+DimPlot(all.integrated, reduction = "ref.umap",  group.by = "predicted.celltype", split.by = 'phenotype', label = TRUE,label.size = 3, repel = TRUE) + NoLegend() + ggtitle("Query transferred labels")
+```
+
+<img src="https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/NEWest_Ramachandran_UMAP.png">
