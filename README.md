@@ -247,3 +247,125 @@ all_list = mapply(function(all_list) FindNeighbors(all_list, dims = 1:20, verbos
 # For each object (sample), run the UMAP dimensionality reduction
 all_list = mapply(function(all_list) FindClusters(all_list, verbose = FALSE), all_list)
 ```
+
+Detect and remove doublets.
+
+```r
+library(scDblFinder)
+
+# Run scDblFinder for all the samples.
+sce.list = list()
+for(name in names(all_list)){
+    sce.list[[name]] <- scDblFinder(as.SingleCellExperiment(all_list[[name]]), clusters="seurat_clusters")    
+}
+
+# Add the scores back to the Seurat object
+for(name in names(all_list)){
+    all_list[[name]]$scDblFinder.score <- sce.list[[name]]$scDblFinder.score
+}
+
+# Add the scores back to the Seurat object
+for(name in names(all_list)){
+    all_list[[name]]$scDblFinder.class <- sce.list[[name]]$scDblFinder.class
+}
+
+# For each object, subset to keep only singlets
+for(name in names(all_list)){
+    all_list[[name]] <- subset(all_list[[name]], subset = scDblFinder.class == 'singlet')
+}
+```
+
+Repeat the processing now that doublets have been removed.
+
+```r
+all_list <- lapply(X = all_list, FUN = SCTransform, vst.flavor = "v2")
+# For each object (sample), run the PCA 
+all_list = mapply(function(all_list) RunPCA(all_list,verbose = FALSE), all_list)
+# For each object (sample), run the UMAP dimensionality reduction
+all_list = mapply(function(all_list) RunUMAP(all_list, dims = 1:20, verbose = FALSE), all_list)
+# For each object (sample), run the UMAP dimensionality reduction
+all_list = mapply(function(all_list) FindNeighbors(all_list, dims = 1:20, verbose = FALSE), all_list)
+# For each object (sample), run the UMAP dimensionality reduction
+all_list = mapply(function(all_list) FindClusters(all_list, verbose = FALSE), all_list)
+
+```
+
+Next, we filter to remove clusters of low quality cells. For each sample, cluster marker genes will be calculated and the cluster will be removed if there is a mitochondrial gene in the top five markers. 
+
+```r
+#For each object (sample), add a metadata column with the phenotype (healthy or cirrhotic)
+all_list = mapply(function(all_list) AddMetaData(all_list, metadata = PercentageFeatureSet(all_list, pattern = "^MT-"),col.name="percent.mt"), all_list, SIMPLIFY = FALSE) 
+
+all_list.markers = mapply(function(all_list) FindAllMarkers(all_list, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25), all_list, SIMPLIFY = FALSE)  
+
+library(dplyr)
+
+# Subset to the top five marker genes
+for (i in 1:length(all_list.markers)) {
+  # Subset the current dataframe based on a condition (e.g., 'gene' contains 'MT-')
+  all_list.markers[[i]] <- all_list.markers[[i]] %>%
+    group_by(cluster) %>%
+    slice_max(n = 5, order_by = avg_log2FC)
+}
+
+# For each object, extract the cluster IDs with 'MT-' in the top five.
+filtered_list = list()
+# Loop through each data frame in the list
+for (i in 1:length(all_list.markers)) {
+  # Get the name of the current dataframe
+  df_name <- names(all_list.markers)[i]
+   # Filter rows based on 'gene' column
+  filtered_rows <- all_list.markers[[i]][grepl('MT-', all_list.markers[[i]]$gene), 'cluster']
+  # Add the filtered rows to the result list with the dataframe name
+  filtered_list[[df_name]] <- unique(as.character(unlist(filtered_rows)))
+}
+
+# subset for objects with > 0 clusters reported
+filtered_list = subset(filtered_list, lapply(filtered_list,length)>0)
+
+# For each sample with a MT cluster, remove the cluster
+for(sample in names(filtered_list)){
+    all_list[[sample]] <- subset(all_list[[sample]], ident = filtered_list[[sample]], invert = TRUE)
+}
+```
+
+Repeat the processing and clustering with the cleaned data.
+
+```r
+all_list <- lapply(X = all_list, FUN = SCTransform, vst.flavor = "v2")
+# For each object (sample), run the PCA 
+all_list = mapply(function(all_list) RunPCA(all_list,verbose = FALSE), all_list)
+# For each object (sample), run the UMAP dimensionality reduction
+all_list = mapply(function(all_list) RunUMAP(all_list, dims = 1:20, verbose = FALSE), all_list)
+# For each object (sample), run the UMAP dimensionality reduction
+all_list = mapply(function(all_list) FindNeighbors(all_list, dims = 1:20, verbose = FALSE), all_list)
+# For each object (sample), run the UMAP dimensionality reduction
+all_list = mapply(function(all_list) FindClusters(all_list, verbose = FALSE), all_list)
+```
+
+Integrate the samples.
+
+```r
+# Try with a reduced number of features and PCA dimensions
+features <- SelectIntegrationFeatures(object.list = all_list, nfeatures = 2500)
+all_list <- PrepSCTIntegration(object.list = all_list, anchor.features = features)
+#liver.anchors <- FindIntegrationAnchors(all_list, normalization.method = "SCT", anchor.features = features) #, dims = 1:30)
+liver.anchors <- FindIntegrationAnchors(all_list, normalization.method = "SCT", anchor.features = features, dims = 1:25)
+
+# this command creates an 'integrated' data assay
+all.integrated <- IntegrateData(anchorset = liver.anchors,  normalization.method = "SCT", preserve.order = TRUE)
+
+all.integrated <- RunPCA(all.integrated, verbose = FALSE)
+all.integrated <- RunUMAP(all.integrated, reduction = "pca", dims = 1:30)
+
+# specify that we will perform downstream analysis on the corrected data note that the original unmodified data still resides in the 'RNA' assay
+DefaultAssay(all.integrated) <- "integrated"
+
+# Run the standard workflow for visualization and clustering
+all.integrated <- FindNeighbors(all.integrated, dims = 1:10)
+all.integrated <- FindClusters(object = all.integrated) #, graph.name = NULL, algorithm = 4)
+
+DimPlot(all.integrated, group.by = "orig.ident")
+DimPlot(all.integrated, group.by = "phenotype")
+DimPlot(all.integrated, group.by = "seurat_clusters", label=TRUE)
+```
