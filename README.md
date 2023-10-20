@@ -186,3 +186,64 @@ ggsave('UMAP_PSAP_maxcutoff_2_small.pdf',width=3.5,height=3)
 <img src="https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/UMAP_PSAP_maxcutoff_4.png" width="50%" height="50%">
 
 ## Cirrhotic vs healthy expression
+
+Download Healthy and Cirrhotic sample files from GEO (GSE136103)[https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE136103]. Assuming these files are in the working directory. 
+
+First, we will list the files in the directory with `_matrix.mtx.gz` in the name using `list.files()`, and create two vectors with the names of each sample by removing the `_matrix.mtx.gz` extension. 
+
+```r
+healthy.samples=gsub('_matrix.mtx.gz','',grep('cd45+',grep('healthy',grep('matrix',list.files(),value=TRUE),value=TRUE),value=TRUE))
+cirrhotic.samples=gsub('_matrix.mtx.gz','',grep('cd45+',grep('cirrhotic',grep('matrix',list.files(),value=TRUE),value=TRUE),value=TRUE))
+```
+
+Next, we create a Seurat object for each sample using the `ReadMtx` file. This utilises a `for` loop, which runs the code for each sample in the vector of sample names created above. This command takes the `_matrix.mtx.gz`, `_barcodes.tsv.gz` and `_genes.tsv.gz` files as input. The code also replaces the + and - with "plus" or "neg" as R doesn't like symbols in object/variable names.
+
+```r
+#Read data matrix files into R using the barcodes and gene dataframes provided. 
+for(x in healthy.samples){
+    data=ReadMtx(paste0(x,'_matrix.mtx.gz'),paste0(x,'_barcodes.tsv.gz'),paste0(x,'_genes.tsv.gz'))
+    seurat_object=CreateSeuratObject(counts=data)
+    if(grepl("+",x)){
+        name=gsub('\\+',"plus",x)}
+    if(grepl("-",x)){
+        name=gsub('\\-',"neg",x)}
+    assign(name,seurat_object)
+}
+
+for(x in cirrhotic.samples){
+    data=ReadMtx(paste0(x,'_matrix.mtx.gz'),paste0(x,'_barcodes.tsv.gz'),paste0(x,'_genes.tsv.gz'))
+    seurat_object=CreateSeuratObject(counts=data)
+    if(grepl("+",x)){
+        name=gsub('\\+',"plus",x)}
+    if(grepl("-",x)){
+        name=gsub('\\-',"neg",x)}
+    assign(name,seurat_object)
+}
+
+#Obtain a vector with the names of all the R objects you have created, which were in the list of sample names with '+' and '-' replaced with 'plus' and 'negative', respectively. 
+all.samples=gsub('\\-','neg',gsub('\\+','plus',c(healthy.samples,cirrhotic.samples)))
+
+#This applies the 'get' function to the vector of names to return the Seurat object of the same name, and saves them as a list.
+all_list=lapply(all.samples,get)
+
+#Assign the names of each item in the list as the sample names
+names(all_list)=all.samples
+
+#For each object (sample), add a metadata column with the name of the sample
+all_list=mapply(function(all_list, i) AddMetaData(all_list,  metadata = as.character(i), col.name="orig.ident"), all_list, names(all_list),SIMPLIFY = FALSE)
+
+#For each object (sample), add a metadata column with the phenotype (healthy or cirrhotic)
+all_list=mapply(function(all_list, i) AddMetaData(all_list, metadata = substr(strsplit(as.character(i),'_')[[1]][2],1,nchar(strsplit(as.character(i),'_')[[1]][2])-1), col.name="phenotype") , all_list, names(all_list),SIMPLIFY = FALSE)   
+
+library(glmGamPoi)
+all_list <- lapply(X = all_list, FUN = SCTransform, vst.flavor = "v2")
+
+# For each object (sample), run the PCA 
+all_list = mapply(function(all_list) RunPCA(all_list,verbose = FALSE), all_list)
+# For each object (sample), run the UMAP dimensionality reduction
+all_list = mapply(function(all_list) RunUMAP(all_list, dims = 1:20, verbose = FALSE), all_list)
+# For each object (sample), run the UMAP dimensionality reduction
+all_list = mapply(function(all_list) FindNeighbors(all_list, dims = 1:20, verbose = FALSE), all_list)
+# For each object (sample), run the UMAP dimensionality reduction
+all_list = mapply(function(all_list) FindClusters(all_list, verbose = FALSE), all_list)
+```
