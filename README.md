@@ -426,7 +426,12 @@ library(dplyr)
 dge.combined = bind_rows(dge, .id = "celltype")
 
 dge.combined[order(dge.combined$p_val_adj),]
+```
 
+<img src="https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/degs_screenshot.png">
+
+
+```r
 celltype = c('Mono+mono derived cells','Neutrophils','Fibroblasts','Endothelial cells','Basophils','Mig.cDCs')
 gene = 'ASAH1' #c('HEXA','HEXB','GLA')
 tmp <- subset(all.integrated, idents = celltype) #,features="HEXA")
