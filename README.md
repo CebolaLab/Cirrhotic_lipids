@@ -435,4 +435,4 @@ VlnPlot(tmp, features = gene, split.by = "phenotype", slot='data', split.plot = 
 ggsave('ASAH1_all_DEGs_NEWviolin.pdf')
 ```
 
-<img src="https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/ASAH1_all_DEGs_NEWviolin.pdf.png">
+<img src="https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/ASAH1_all_DEGs_NEWviolin.png">
