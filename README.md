@@ -1,5 +1,5 @@
-# Cirrhotic lipid project: single-cell gene expression in liver
-A GitHub containing the code for analysing single-cell expression of candidate genes (Cebola lab + Zoe Hall collaboration)
+# Gruevska et al: single-cell gene expression in liver
+A GitHub containing the code for analysing single-cell expression of candidate genes (Gruevska et al).
 
 Corresponding author: Hannah Maude, hannah.maude12@imperial.ac.uk
 
@@ -376,6 +376,8 @@ DimPlot(all.integrated, group.by = "orig.ident")
 DimPlot(all.integrated, group.by = "phenotype")
 DimPlot(all.integrated, group.by = "seurat_clusters", label=TRUE)
 ```
+
+<img src="https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/Ramachandran-umap1.png">
 
 ## Integrate the Ramachandran et al. dataset with the Liver Cell Atlas
 
