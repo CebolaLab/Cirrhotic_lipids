@@ -392,3 +392,47 @@ DimPlot(all.integrated, reduction = "ref.umap",  group.by = "predicted.celltype"
 ```
 
 <img src="https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/NEWest_Ramachandran_UMAP.png">
+
+```r
+all.integrated$celltype.phenotype <- paste(all.integrated$predicted.celltype, all.integrated$phenotype, sep = "_")
+
+Idents(all.integrated) = 'predicted.celltype'
+
+# For visualisation and differential gene expression, set the default assay back to SCT
+DefaultAssay(all.integrated) <- "SCT"
+
+# subset the query gene list for genes in the dataset
+longgenes = subset(genes.long[,1], genes.long[,1] %in% rownames(all.integrated@assays$SCT@data))
+
+dge = list()
+for(x in unique(Idents(all.integrated))){
+    tmp <- subset(all.integrated, idents = x, features = longgenes)
+    Idents(tmp) <- 'phenotype'
+    DefaultAssay(tmp) <- 'RNA'
+    dge[[x]] <- FindMarkers(tmp, ident.1 = "cirrhotic", ident.2 = "healthy", verbose = FALSE)
+}
+
+# Define a function to add rownames as a 'Gene' column
+add_gene_column <- function(df) {
+  df$Gene <- rownames(df)
+  return(df)
+}
+
+# Apply the function to each dataframe in df_list using mapply
+dge <- mapply(add_gene_column, dge, SIMPLIFY = FALSE)
+
+# Combine the dataframes and add a column with names
+library(dplyr)
+dge.combined = bind_rows(dge, .id = "celltype")
+
+dge.combined[order(dge.combined$p_val_adj),]
+
+celltype = c('Mono+mono derived cells','Neutrophils','Fibroblasts','Endothelial cells','Basophils','Mig.cDCs')
+gene = 'ASAH1' #c('HEXA','HEXB','GLA')
+tmp <- subset(all.integrated, idents = celltype) #,features="HEXA")
+VlnPlot(tmp, features = gene, split.by = "phenotype", slot='data', split.plot = TRUE)
+#ggsave(paste0(celltype,'_NEWviolin_',gene,'.pdf'))
+ggsave('ASAH1_all_DEGs_NEWviolin.pdf')
+```
+
+<img src="https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/ASAH1_all_DEGs_NEWviolin.pdf.png">
