@@ -5,11 +5,11 @@ Corresponding author: Hannah Maude, hannah.maude12@imperial.ac.uk
 
 **Plots to create:**
 
-A) [Expression by cell type](#expression-by-cell-type): expression per cell population dot plot of set of 30 genes (Guilliams et al. dataset)
+A) [Expression by cell type](#expression-by-cell-type): expression per cell population dot plot of set of 30 genes (Liver Cell Atlas: Guilliams et al. dataset)
 
-B) [Candidate gene UMAPs](#candidate-gene-UMAPs): some individual UMAPS of key genes Guilliams data set)
+B) [Candidate gene UMAPs](#candidate-gene-UMAPs): some individual UMAPS of key genes
 
-C) [Cirrhotic vs healthy expression](#cirrhotic-vs-healthy-expression): some cirrhotic v healthy violin plots from Ramachandran dataset of a few key genes and their relevant cell populations.
+C) [Cirrhotic vs healthy expression](#cirrhotic-vs-healthy-expression): cirrhotic vs healthy violin plots from the Ramachandran et al. dataset of a few key genes and their relevant cell populations.
 
 ## Expression by cell type
 
@@ -56,7 +56,7 @@ library('limma')
 library('ggplot2')
 ```
 
-The single-cell RNA-seq data from the [Guilliams et al. 2022](https://www.cell.com/cell/fulltext/S0092-8674(21)01481-1) Liver Cell Atlas is available at this link: [https://www.livercellatlas.org/datasets_human.php](https://www.livercellatlas.org/datasets_human.php). The data can be downloaded from [this page](https://www.livercellatlas.org/download.php), including the gene-cell count matrix and cell annotation matrix for all liver cells, or analysis subsets (myeloid cells, lymphoid cells, CD45- cells). Download the *cell annotation matrix* for all liver cells:
+The single-cell RNA-seq data from the [Guilliams et al. 2022](https://www.cell.com/cell/fulltext/S0092-8674(21)01481-1) Liver Cell Atlas is available at this link: [https://www.livercellatlas.org/datasets_human.php](https://www.livercellatlas.org/datasets_human.php). The data can be downloaded from [this page](https://www.livercellatlas.org/download.php), including the gene-cell count matrix and cell annotation matrix for all liver cells, or analysis subsets (myeloid cells, lymphoid cells, CD45- cells). The data, including the *cell annotation matrix*, can be downloaded for all liver cells via the command line:
 
 ```bash
 # Run this on the command line (bash)
@@ -121,8 +121,9 @@ AAACGGGAGTTAGGTA-1 | SeuratProject | 1615 | 719	| 7 | Mono+mono derived cells	| 
 AAACGGGCACCAGATT-1 | SeuratProject | 2537 | 848	| 7 | Mono+mono derived cells | 2652 | 848 |
 AAACGGGTCATTGCCC-1 | SeuratProject | 5905 | 1406 | 43 | cDC1s | 4157	| 1403 | 
 
+The UMAP coordinates corresponding to the Liver Cell Atlas webpage can be added for consistency. Here, the UMAP will be recalculated to add the full model for reference-query dataset integration.
+
 ```r
-# The UMAP coordinates corresponding to the Liver Cell Atlas webpage can be added for consistency. Here, the UMAP will be recalculated to add the full model for reference-query dataset integration.
 # extract the meta data and add the UMAP coordinates
 # umapCoord = cell.annot[,1:2]
 # rownames(umapCoord) = cell.annot$cell
@@ -137,9 +138,8 @@ liver.filtered <- RunUMAP(liver.filtered, reduction = "pca", dims = 1:30, return
 
 ```r
 # add it by CreateDimReducObject
-liver.filtered[['umap']] <- CreateDimReducObject(embeddings = as.matrix(liver.filtered@meta.data[,c('UMAP_1','UMAP_2')]),
-                                key = 'umap_', assay = 'RNA')
-DimPlot(object = liver.filtered, label = TRUE,group.by = 'annot', reduction = "umap") + NoLegend() #+ ggtitle("Integrated controls") #+ ylim(-12,15) + xlim(-20,10)
+#liver.filtered[['umap']] <- CreateDimReducObject(embeddings = as.matrix(liver.filtered@meta.data[,c('UMAP_1','UMAP_2')]),key = 'umap_', assay = 'RNA')
+DimPlot(object = liver.filtered, label = TRUE, group.by = 'annot', reduction = "umap") + NoLegend() #+ ggtitle("Integrated controls") #+ ylim(-12,15) + xlim(-20,10)
 ```
 
 <img src="https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/Liver_atlas_all_clusters_github.png" width="50%" height="50%">
@@ -148,7 +148,8 @@ DimPlot(object = liver.filtered, label = TRUE,group.by = 'annot', reduction = "u
 Read in the file containing the genes of interest:
 
 ```r
-genes = read.delim('candidate_genes_dotplots.txt')
+genes = read.delim('main_gene_list_short.txt')
+#genes = read.delim('main_gene_list_long.txt')
 head(genes)
 ```
 | Gene | Function |
@@ -193,7 +194,7 @@ ggsave('UMAP_PSAP_maxcutoff_2_small.pdf',width=3.5,height=3)
 
 ## Cirrhotic vs healthy expression
 
-Download Healthy and Cirrhotic sample files from GEO (GSE136103)[https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE136103]. Assuming these files are in the working directory. 
+Download Healthy and Cirrhotic sample files from GEO [GSE136103](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE136103). Assuming these files are in the working directory. 
 
 First, we will list the files in the directory with `_matrix.mtx.gz` in the name using `list.files()`, and create two vectors with the names of each sample by removing the `_matrix.mtx.gz` extension. 
 
