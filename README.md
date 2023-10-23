@@ -1,5 +1,5 @@
 # Gruevska et al: single-cell gene expression in liver
-A GitHub containing the code for analysing single-cell expression of candidate genes (Gruevska et al).
+A GitHub containing the code for analysing single-cell expression of candidate genes for Gruevska et al. 
 
 Corresponding author: Zoe Hall, zoe.hall@imperial.ac.uk 
 
@@ -439,4 +439,4 @@ VlnPlot(tmp, features = gene, split.by = "phenotype", slot='data', split.plot = 
 ggsave('ASAH1_all_DEGs_NEWviolin.pdf')
 ```
 
-<img src="https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/ASAH1_all_DEGs_NEWviolin.png">
+<img src="https://github.com/CebolaLab/Cirrhotic_lipids/blob/main/Figures/ASAH1_all_DEGs_NEWviolin.png" width="50%" height="50%">
