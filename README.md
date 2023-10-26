@@ -11,8 +11,6 @@ A) [Expression by cell type](#expression-by-cell-type): expression per cell popu
 
 B) [Candidate gene UMAPs](#candidate-gene-UMAPs): some individual UMAPS of key genes
 
-C) [Cirrhotic vs healthy expression](#cirrhotic-vs-healthy-expression): cirrhotic vs healthy violin plots from the Ramachandran et al. dataset of a few key genes and their relevant cell populations.
-
 ## Expression by cell type
 
 First, we will explore the expression of our candidate genes using the scRNA-seq data from [Guilliams et al. (2022)](https://www.cell.com/cell/fulltext/S0092-8674(21)01481-1), available via the [Liver Cell Atlas](https://www.livercellatlas.org/datasets_human.php). 
