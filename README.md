@@ -176,9 +176,7 @@ FAR1	| Endothelial, stromal, other
 SPTLC2	| Variety - highest in macropahge, endothelial
 SGMS1	| Hep, stromal and others
 ASAH1	| Macrophage and others
-S1PR4	| Monocytes, NK, T
 UGCG	| Dendirtic and others
-PSAP	| High esp mono and macro
 
 ```r
 # Plot UMAPs using the FeaturePlot command
