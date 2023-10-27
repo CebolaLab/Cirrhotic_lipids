@@ -7,7 +7,7 @@ Github author: Hannah Maude, hannah.maude12@imperial.ac.uk
 
 **Plots to create:**
 
-A) [Expression by cell type](#expression-by-cell-type): expression per cell population dot plot of set of 30 genes (Liver Cell Atlas: Guilliams et al. dataset)
+A) [Expression by cell type](#expression-by-cell-type): expression per cell population dot plot of candidate genes
 
 B) [Candidate gene UMAPs](#candidate-gene-UMAPs): some individual UMAPS of key genes
 
@@ -46,6 +46,8 @@ GLA	| Glycosphingolipid metabolism
 HEXA	| Glycosphingolipid metabolism
 NEU1    | Glycosphingolipid metabolism
 
+The `scRNA.yml` file included in this repository can be used to create a conda environment with the required packages installed.
+
 ```r
 # Load libraries
 library('Seurat')
@@ -56,12 +58,17 @@ library('limma')
 library('ggplot2')
 ```
 
-The single-cell RNA-seq data from the [Guilliams et al. 2022](https://www.cell.com/cell/fulltext/S0092-8674(21)01481-1) Liver Cell Atlas is available at this link: [https://www.livercellatlas.org/datasets_human.php](https://www.livercellatlas.org/datasets_human.php). The data can be downloaded from [this page](https://www.livercellatlas.org/download.php), including the gene-cell count matrix and cell annotation matrix for all liver cells, or analysis subsets (myeloid cells, lymphoid cells, CD45- cells). The data, including the *cell annotation matrix*, can be downloaded for all liver cells via the command line:
+The single-cell RNA-seq data from the [Guilliams et al. 2022](https://www.cell.com/cell/fulltext/S0092-8674(21)01481-1) Liver Cell Atlas is available at this link: [https://www.livercellatlas.org/datasets_human.php](https://www.livercellatlas.org/datasets_human.php). The data can be downloaded from [this page](https://www.livercellatlas.org/download.php), including the gene-cell count matrix and cell annotation matrix for all liver cells, or analysis subsets (myeloid cells, lymphoid cells, CD45- cells). The data can be downloaded for all liver cells via the command line:
 
 ```bash
 # Run this on the command line (bash)
 wget https://www.livercellatlas.org/data_files/toDownload/annot_humanAll.csv
+
+wget https://www.livercellatlas.org/data_files/toDownload/rawData_human.zip
+unzip rawData_human.zip
 ```
+
+Run the following code in R.
 
 ```r
 # The data can then be read into R
@@ -73,11 +80,6 @@ cell.annot = read.table('annot_humanAll.csv',sep=',',header=TRUE)
 
 Download the cell count matrices and extract the zipped file (rawData_human.zip). 
 
-```bash 
-# This is run on the command line (bash)
-wget https://www.livercellatlas.org/data_files/toDownload/rawData_human.zip
-unzip rawData_human.zip
-```
 
 The data can be read into R:
 ```r
@@ -96,6 +98,7 @@ Filter the `liverall` object using the `cell.annot` dataframe, which contains ce
 
 ```r
 liver.filtered = subset(liverall_object, cells = cell.annot$cell)
+
 # Add information to the metadata in the liver.filtered object.
 liver.filtered[['cluster']] = cell.annot$cluster
 liver.filtered[['annot']] = cell.annot$annot
@@ -168,7 +171,7 @@ ggsave('genes_of_interest_dotplot.pdf',width=10)
 ## Candidate gene UMAPs
 
 UMAP:
-| Gene	| B |
+| Gene	| Cell type |
 | ---- | ---- | 
 LPCAT1 |Endothelial and NKT
 LPCAT2	| Macrophages
